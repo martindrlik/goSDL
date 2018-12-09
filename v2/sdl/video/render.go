@@ -7,7 +7,7 @@ import (
 	"image/color"
 	"unsafe"
 
-	"github.com/martindrlik/v2/sdl"
+	"github.com/martindrlik/sdlbindings/v2/sdl"
 )
 
 // Renderer contains a rendering state.

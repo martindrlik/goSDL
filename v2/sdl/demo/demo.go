@@ -4,9 +4,9 @@ import (
 	"image/color"
 	"log"
 
-	"github.com/martindrlik/v2/sdl"
-	"github.com/martindrlik/v2/sdl/events"
-	"github.com/martindrlik/v2/sdl/video"
+	"github.com/martindrlik/sdlbindings/v2/sdl"
+	"github.com/martindrlik/sdlbindings/v2/sdl/events"
+	"github.com/martindrlik/sdlbindings/v2/sdl/video"
 )
 
 func main() {

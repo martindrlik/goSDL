@@ -7,7 +7,7 @@ import "C"
 import (
 	"unsafe"
 
-	"github.com/martindrlik/v2/sdl"
+	"github.com/martindrlik/sdlbindings/v2/sdl"
 )
 
 const (
@@ -99,8 +99,21 @@ func (window *Window) Destroy() {
 	C.SDL_DestroyWindow(window.cptr())
 }
 
-// SDL_DisableScreenSaver
-// SDL_EnableScreenSaver
+// DisableScreenSaver prevents the screen from
+// being blanked by a screen saver.
+//
+// If you disable the screensaver, it is automatically
+// re-enabled when SDL quits.
+func DisableScreenSaver() {
+	C.SDL_DisableScreenSaver()
+}
+
+// EnableScreenSaver allows the screen to be
+// blanked by a screen saver.
+func EnableScreenSaver() {
+	C.SDL_EnableScreenSaver()
+}
+
 // SDL_GL_CreateContext
 // SDL_GL_DeleteContext
 // SDL_GL_ExtensionSupported
@@ -148,14 +161,42 @@ func (window *Window) Destroy() {
 // SDL_GetWindowPosition
 // SDL_GetWindowSize
 // SDL_GetWindowSurface
-// SDL_GetWindowTitle
+
+// Title gets the title of a window.
+func (window *Window) Title() string {
+	return C.GoString(C.SDL_GetWindowTitle(window.cptr()))
+}
+
 // SDL_GetWindowWMInfo
-// SDL_HideWindow
+
+// Hide hides a window.
+func (window *Window) Hide() {
+	C.SDL_HideWindow(window.cptr())
+}
+
 // SDL_IsScreenSaverEnabled
-// SDL_MaximizeWindow
-// SDL_MinimizeWindow
-// SDL_RaiseWindow
-// SDL_RestoreWindow
+
+// Maximize makes a window as large as possible.
+func (window *Window) Maximize() {
+	C.SDL_MaximizeWindow(window.cptr())
+}
+
+// Minimize minimizes a window to an iconic representation.
+func (window *Window) Minimize() {
+	C.SDL_MinimizeWindow(window.cptr())
+}
+
+// Raise raises a window above other windows and set the input focus.
+func (window *Window) Raise() {
+	C.SDL_RaiseWindow(window.cptr())
+}
+
+// Restore restores the size and position of a minimized
+// or maximized window.
+func (window *Window) Restore() {
+	C.SDL_RestoreWindow(window.cptr())
+}
+
 // SDL_SetWindowBordered
 // SDL_SetWindowBrightness
 // SDL_SetWindowData
@@ -173,10 +214,20 @@ func (window *Window) Destroy() {
 // SDL_SetWindowPosition
 // SDL_SetWindowResizable
 // SDL_SetWindowSize
-// SDL_SetWindowTitle
+
+// SetTitle sets the title of a window.
+func (window *Window) SetTitle(title string) {
+	C.SDL_SetWindowTitle(window.cptr(), C.CString(title))
+}
+
 // SDL_ShowMessageBox
 // SDL_ShowSimpleMessageBox
-// SDL_ShowWindow
+
+// Show shows a window.
+func (window *Window) Show() {
+	C.SDL_ShowWindow(window.cptr())
+}
+
 // SDL_UpdateWindowSurface
 // SDL_UpdateWindowSurfaceRects
 // SDL_VideoInit
