@@ -1,6 +1,6 @@
-# libSDL
+# goSDL
 
-libSDL is another SDL bindings for Go programming language.
+goSDL is another SDL bindings for Go programming language.
 
 ## Goals
 
