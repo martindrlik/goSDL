@@ -5,7 +5,7 @@ import (
 
 	"github.com/martindrlik/sdlbindings/v2/sdl"
 	"github.com/martindrlik/sdlbindings/v2/sdl/events"
-	"github.com/martindrlik/sdlbindings/v2/sdl/video"
+	"github.com/martindrlik/sdlbindings/v2/video"
 )
 
 func main() {
