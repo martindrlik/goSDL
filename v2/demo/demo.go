@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
+	"github.com/martindrlik/sdlbindings/v2/events"
 	"github.com/martindrlik/sdlbindings/v2/sdl"
-	"github.com/martindrlik/sdlbindings/v2/sdl/events"
 	"github.com/martindrlik/sdlbindings/v2/video"
 )
 
