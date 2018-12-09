@@ -4,7 +4,6 @@ package video
 import "C"
 
 import (
-	"image/color"
 	"unsafe"
 
 	"github.com/martindrlik/sdlbindings/v2/sdl"
@@ -124,8 +123,7 @@ func (renderer *Renderer) RenderPresent() {
 
 // SetRenderDrawColor sets the color used for drawing
 // operations (Rect, Line and Clear).
-func (renderer *Renderer) SetRenderDrawColor(c color.Color) error {
-	r, g, b, a := c.RGBA()
+func (renderer *Renderer) SetRenderDrawColor(r, g, b, a uint8) error {
 	if C.SDL_SetRenderDrawColor(
 		renderer.cptr(),
 		C.Uint8(r),

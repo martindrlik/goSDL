@@ -1,7 +1,6 @@
 package main
 
 import (
-	"image/color"
 	"log"
 
 	"github.com/martindrlik/sdlbindings/v2/sdl"
@@ -33,19 +32,19 @@ func main() {
 		if ev.Type == events.Quit {
 			break
 		}
-		if err = renderer.SetRenderDrawColor(color.Black); err != nil {
+		if err = renderer.SetRenderDrawColor(0, 0, 0, 255); err != nil {
 			log.Fatalf("demo: unable to set color for clear: %v", err)
 		}
 		if err = renderer.RenderClear(); err != nil {
 			log.Fatalf("demo: unable to clear renderer: %v", err)
 		}
-		if err = renderer.SetRenderDrawColor(color.White); err != nil {
+		if err = renderer.SetRenderDrawColor(255, 255, 255, 255); err != nil {
 			log.Fatalf("demo: unable to set color for drawing point: %v", err)
 		}
 		if err = renderer.RenderDrawPoint(320, 320); err != nil {
 			log.Fatalf("demo: unable to draw center point: %v", err)
 		}
-		if err = renderer.SetRenderDrawColor(color.RGBA{255, 0, 0, 0}); err != nil {
+		if err = renderer.SetRenderDrawColor(255, 0, 0, 255); err != nil {
 			log.Fatalf("demo: unable to set red color for drawing 3 points")
 		}
 		if err = renderer.RenderDrawPoints([]struct{ X, Y int32 }{
@@ -55,7 +54,7 @@ func main() {
 		}); err != nil {
 			log.Fatalf("demo: unable to draw 3 points: %v", err)
 		}
-		if err = renderer.SetRenderDrawColor(color.RGBA{0, 255, 0, 0}); err != nil {
+		if err = renderer.SetRenderDrawColor(0, 255, 0, 255); err != nil {
 			log.Fatalf("demo: unable to set green color for drawing a line: %v", err)
 		}
 		if err = renderer.RenderDrawLine(350, 350, 400, 400); err != nil {
