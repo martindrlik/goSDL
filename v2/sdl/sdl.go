@@ -22,7 +22,7 @@ func Register(subsystem Subsystem) {
 // called before using most other SDL functions.
 func Init() error {
 	if C.SDL_Init(C.uint(subsystems)) < 0 {
-		return Error()
+		return Error(ErrFailure)
 	}
 	return nil
 }

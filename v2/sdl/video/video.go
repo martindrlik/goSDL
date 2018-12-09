@@ -79,7 +79,8 @@ const (
 )
 
 var (
-	ErrNoWindowForID = errors.New("no window associated with given windowID")
+	ErrNoWindowForID       = errors.New("no window associated with given windowID")
+	ErrInvalidDisplayIndex = errors.New("invalid display index or failure")
 )
 
 func init() {
@@ -103,7 +104,7 @@ func CreateWindow(title string, x, y, width, height int, flags WindowFlag) (*Win
 		C.int(height),
 		C.Uint32(flags))
 	if window == nil {
-		return nil, sdl.Error()
+		return nil, sdl.Error(sdl.ErrFailure)
 	}
 	return (*Window)(unsafe.Pointer(window)), nil
 }
@@ -120,7 +121,7 @@ func CreateWindowAndRenderer(width, height int, flags WindowFlag) (*Window, *Ren
 		C.Uint32(flags),
 		&window,
 		&renderer) != 0 {
-		return nil, nil, sdl.Error()
+		return nil, nil, sdl.Error(sdl.ErrFailure)
 	}
 	return (*Window)(unsafe.Pointer(window)), (*Renderer)(unsafe.Pointer(renderer)), nil
 }
@@ -170,12 +171,41 @@ func EnableScreenSaver() {
 // SDL_GetDisplayBounds
 // SDL_GetDisplayDPI
 // SDL_GetDisplayMode
-// SDL_GetDisplayName
+
+// DisplayName gets the name of a display in UTF-8 encoding.
+func DisplayName(displayIndex int) (string, error) {
+	cs := C.SDL_GetDisplayName(C.int(displayIndex))
+	if cs == nil {
+		return "", sdl.Error(ErrInvalidDisplayIndex)
+	}
+	return C.GoString(cs), nil
+}
+
 // SDL_GetDisplayUsableBounds
 // SDL_GetGrabbedWindow
-// SDL_GetNumDisplayModes
-// SDL_GetNumVideoDisplays
-// SDL_GetNumVideoDrivers
+
+// NumDisplayModes gets the number of available display modes.
+func NumDisplayModes(displayIndex int) (int, error) {
+	return intError(C.SDL_GetNumDisplayModes(C.int(displayIndex)))
+}
+
+// NumDisplays gets the number of available video displays.
+func NumDisplays() (int, error) {
+	return intError(C.SDL_GetNumVideoDisplays())
+}
+
+// NumDrivers gets the number of video drivers compiled into SDL.
+func NumDrivers() (int, error) {
+	return intError(C.SDL_GetNumVideoDrivers())
+}
+
+func intError(result C.int) (int, error) {
+	if result < 0 {
+		return 0, sdl.Error(sdl.ErrFailure)
+	}
+	return int(result), nil
+}
+
 // SDL_GetVideoDriver
 // SDL_GetWindowBordersSize
 // SDL_GetWindowBrightness
@@ -189,13 +219,10 @@ type WindowID uint32
 // WindowFromID gets a window from a stored ID.
 func WindowFromID(windowID WindowID) (*Window, error) {
 	window := C.SDL_GetWindowFromID(C.Uint32(windowID))
-	if window != nil {
-		return (*Window)(unsafe.Pointer(window)), nil
+	if window == nil {
+		return nil, sdl.Error(ErrNoWindowForID)
 	}
-	if err := sdl.Error(); err != nil {
-		return nil, err
-	}
-	return nil, ErrNoWindowForID
+	return (*Window)(unsafe.Pointer(window)), nil
 }
 
 // SDL_GetWindowGammaRamp
@@ -205,7 +232,7 @@ func WindowFromID(windowID WindowID) (*Window, error) {
 func (window *Window) ID() (WindowID, error) {
 	result := C.SDL_GetWindowID(window.cptr())
 	if result == 0 {
-		return 0, sdl.Error()
+		return 0, sdl.Error(sdl.ErrFailure)
 	}
 	return WindowID(result), nil
 }
@@ -282,7 +309,21 @@ func (window *Window) Restore() {
 // SDL_SetWindowBrightness
 // SDL_SetWindowData
 // SDL_SetWindowDisplayMode
-// SDL_SetWindowFullscreen
+
+// SetFullscreen sets a window's fullscreen state.
+//
+// Flags may be Fullscreen, for "real" fullscreen with a videomode change;
+// FullscreenDesktop for "fake" fullscreen that takes the size of the desktop;
+// and 0 for windowed mode.
+func (window *Window) SetFullscreen(flags WindowFlag) error {
+	if C.SDL_SetWindowFullscreen(
+		window.cptr(),
+		C.Uint32(flags)) < 0 {
+		return sdl.Error(sdl.ErrFailure)
+	}
+	return nil
+}
+
 // SDL_SetWindowGammaRamp
 // SDL_SetWindowGrab
 // SDL_SetWindowHitTest

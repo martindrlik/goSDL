@@ -22,7 +22,7 @@ func main() {
 	}
 	if window, renderer, err = video.CreateWindowAndRenderer(
 		640,
-		640,
+		480,
 		video.Resizable); err != nil {
 		log.Fatalf("demo: unable to create window and renderer: %v", err)
 	}
