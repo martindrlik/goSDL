@@ -18,13 +18,13 @@ func main() {
 		ev       events.Event
 	)
 	if err = sdl.Init(); err != nil {
-		log.Fatalf("demo: unable initialize: %v", err)
+		log.Fatalf("demo: unable to initialize: %v", err)
 	}
 	if window, renderer, err = video.CreateWindowAndRenderer(
 		640,
 		640,
 		video.Resizable); err != nil {
-		log.Fatalf("demo: unable create window and renderer: %v", err)
+		log.Fatalf("demo: unable to create window and renderer: %v", err)
 	}
 	defer renderer.Destroy()
 	defer window.Destroy()
@@ -37,13 +37,29 @@ func main() {
 			log.Fatalf("demo: unable to set color for clear: %v", err)
 		}
 		if err = renderer.RenderClear(); err != nil {
-			log.Fatalf("demo: unable clear renderer: %v", err)
+			log.Fatalf("demo: unable to clear renderer: %v", err)
 		}
 		if err = renderer.SetRenderDrawColor(color.White); err != nil {
 			log.Fatalf("demo: unable to set color for drawing point: %v", err)
 		}
 		if err = renderer.RenderDrawPoint(320, 320); err != nil {
 			log.Fatalf("demo: unable to draw center point: %v", err)
+		}
+		if err = renderer.SetRenderDrawColor(color.RGBA{255, 0, 0, 0}); err != nil {
+			log.Fatalf("demo: unable to set red color for drawing 3 points")
+		}
+		if err = renderer.RenderDrawPoints([]struct{ X, Y int32 }{
+			{10, 20},
+			{30, 40},
+			{50, 60},
+		}); err != nil {
+			log.Fatalf("demo: unable to draw 3 points: %v", err)
+		}
+		if err = renderer.SetRenderDrawColor(color.RGBA{0, 255, 0, 0}); err != nil {
+			log.Fatalf("demo: unable to set green color for drawing a line: %v", err)
+		}
+		if err = renderer.RenderDrawLine(350, 350, 400, 400); err != nil {
+			log.Fatalf("demo: unable to draw green line: %v", err)
 		}
 		renderer.RenderPresent()
 	}

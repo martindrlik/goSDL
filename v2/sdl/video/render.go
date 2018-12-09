@@ -85,7 +85,17 @@ func (renderer *Renderer) RenderDrawPoint(x, y int) error {
 	return nil
 }
 
-// SDL_RenderDrawPoints
+// RenderDrawPoints draws multiple points on the current rendering target.
+func (renderer *Renderer) RenderDrawPoints(points []struct{ X, Y int32 }) error {
+	if C.SDL_RenderDrawPoints(
+		renderer.cptr(),
+		(*C.SDL_Point)(unsafe.Pointer(&points[0])),
+		C.int(len(points))) < 0 {
+		return sdl.Error()
+	}
+	return nil
+}
+
 // SDL_RenderDrawRect
 // SDL_RenderDrawRects
 // SDL_RenderFillRect
