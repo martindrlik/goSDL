@@ -382,7 +382,18 @@ func (window *Window) SetTitle(title string) {
 }
 
 // SDL_ShowMessageBox
-// SDL_ShowSimpleMessageBox
+
+// ShowSimpleMessageBox displays a simple modal message box.
+func ShowSimpleMessageBox(flags MessageBoxFlag, title, message string, parent *Window) error {
+	if C.SDL_ShowSimpleMessageBox(
+		C.Uint32(flags),
+		C.CString(title),
+		C.CString(message),
+		parent.cptr()) >= 0 {
+		return nil
+	}
+	return sdl.Error(sdl.ErrFailure)
+}
 
 // Show shows a window.
 func (window *Window) Show() {
