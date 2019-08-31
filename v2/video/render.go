@@ -6,7 +6,7 @@ import "C"
 import (
 	"unsafe"
 
-	"github.com/martindrlik/sdlbindings/v2/sdl"
+	"github.com/martindrlik/goSDL/v2/sdl"
 )
 
 // Renderer contains a rendering state.

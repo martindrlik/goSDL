@@ -9,7 +9,7 @@ import (
 	"errors"
 	"unsafe"
 
-	"github.com/martindrlik/sdlbindings/v2/sdl"
+	"github.com/martindrlik/goSDL/v2/sdl"
 )
 
 type WindowFlag C.SDL_WindowFlags
