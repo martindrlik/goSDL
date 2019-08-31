@@ -208,7 +208,12 @@ func intError(result C.int) (int, error) {
 
 // SDL_GetVideoDriver
 // SDL_GetWindowBordersSize
-// SDL_GetWindowBrightness
+
+// Brightness gets the brightness (gamma multiplier) for the display that owns this window.
+func (window *Window) Brightness() float32 {
+	return float32(C.SDL_GetWindowBrightness(window.cptr()))
+}
+
 // SDL_GetWindowData
 // SDL_GetWindowDisplayIndex
 // SDL_GetWindowDisplayMode
@@ -306,7 +311,16 @@ func (window *Window) Restore() {
 }
 
 // SDL_SetWindowBordered
-// SDL_SetWindowBrightness
+
+// SetBrightness sets the brightness (gamma multiplier) for the display that owns this window.
+// Brightness f value should be set where 0.0 is completely dark and 1.0 is normal brightness.
+func (window *Window) SetBrightness(f float32) error {
+	if C.SDL_SetWindowBrightness(window.cptr(), C.float(f)) >= 0 {
+		return nil
+	}
+	return sdl.Error(sdl.ErrFailure)
+}
+
 // SDL_SetWindowData
 // SDL_SetWindowDisplayMode
 

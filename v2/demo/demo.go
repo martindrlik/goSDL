@@ -27,6 +27,9 @@ func main() {
 	}
 	defer renderer.Destroy()
 	defer window.Destroy()
+	bright := window.Brightness()
+	defer func() { window.SetBrightness(bright) }()
+	window.SetBrightness(1.5)
 	for {
 		events.PollEvent(&ev)
 		if ev.Type == events.Quit {
