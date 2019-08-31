@@ -129,8 +129,17 @@ type Event struct {
 // SDL_GetNumTouchFingers
 // SDL_GetTouchDevice
 // SDL_GetTouchFinger
-// SDL_HasEvent
-// SDL_HasEvents
+
+// HasEvent checks for the existence of certain event type in the event queue.
+func HasEvent(t int) bool {
+	return C.SDL_HasEvent(C.Uint32(t)) == C.SDL_TRUE
+}
+
+// HasEvents checks for the existence of a range of event types in the event queue.
+func HasEvents(min, max int) bool {
+	return C.SDL_HasEvents(C.Uint32(min), C.Uint32(max)) == C.SDL_TRUE
+}
+
 // SDL_LoadDollarTemplates
 // SDL_PeepEvents
 
