@@ -63,21 +63,23 @@ const (
 	ControllerDeviceRemoved  = C.SDL_CONTROLLERDEVICEREMOVED  // controller disconnected
 	ControllerDeviceRemapped = C.SDL_CONTROLLERDEVICEREMAPPED // controller mapping updated
 
-// Touch events
+	// Touch events
 
-// SDL_FINGERDOWN
-// user has touched input device
-// SDL_FINGERUP
-// user stopped touching input device
-// SDL_FINGERMOTION
-// user is dragging finger on input device
-// Gesture events
-// SDL_DOLLARGESTURE
-// SDL_DOLLARRECORD
-// SDL_MULTIGESTURE
-// Clipboard events
-// SDL_CLIPBOARDUPDATE
-// the clipboard changed
+	// SDL_FINGERDOWN
+	// user has touched input device
+	// SDL_FINGERUP
+	// user stopped touching input device
+	// SDL_FINGERMOTION
+	// user is dragging finger on input device
+	// Gesture events
+	// SDL_DOLLARGESTURE
+	// SDL_DOLLARRECORD
+	// SDL_MULTIGESTURE
+
+	// Clipboard events
+
+	ClipboardUpdate = C.SDL_CLIPBOARDUPDATE // the clipboard changed
+
 // Drag and drop events
 // SDL_DROPFILE
 // the system requests a file open
