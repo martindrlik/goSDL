@@ -3,9 +3,9 @@ package main
 import (
 	"log"
 
-	"github.com/martindrlik/goSDL/v2/events"
-	"github.com/martindrlik/goSDL/v2/sdl"
-	"github.com/martindrlik/goSDL/v2/video"
+	"github.com/martindrlik/goSDL/events"
+	"github.com/martindrlik/goSDL/sdl"
+	"github.com/martindrlik/goSDL/video"
 )
 
 func main() {
