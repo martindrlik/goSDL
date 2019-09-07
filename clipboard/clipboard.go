@@ -5,6 +5,7 @@ package clipboard
 import "C"
 
 import (
+	"errors"
 	"unsafe"
 
 	"github.com/martindrlik/goSDL/sdl"
@@ -14,7 +15,7 @@ import (
 func Text() (string, error) {
 	cs := C.SDL_GetClipboardText()
 	if cs == nil {
-		return "", sdl.Error(sdl.ErrFailure)
+		return "", errors.New(sdl.Error())
 	}
 	C.SDL_free(unsafe.Pointer(cs))
 	return C.GoString(cs), nil
@@ -31,5 +32,5 @@ func SetText(text string) error {
 	if C.SDL_SetClipboardText(C.CString(text)) >= 0 {
 		return nil
 	}
-	return sdl.Error(sdl.ErrFailure)
+	return errors.New(sdl.Error())
 }
