@@ -13,7 +13,11 @@ import (
 	"github.com/martindrlik/goSDL/sdl"
 )
 
-type WindowFlag C.SDL_WindowFlags
+type (
+	WindowFlag     C.SDL_WindowFlags
+	MessageBoxFlag C.SDL_MessageBoxFlags
+	Window         C.SDL_Window
+)
 
 const (
 	// Fullscreen is flag for fullscreen window.
@@ -68,8 +72,6 @@ const (
 	PopupMenu WindowFlag = C.SDL_WINDOW_POPUP_MENU
 )
 
-type MessageBoxFlag C.SDL_MessageBoxFlags
-
 const (
 	// Error is flag for displaying error dialog.
 	Error MessageBoxFlag = C.SDL_MESSAGEBOX_ERROR
@@ -87,8 +89,6 @@ var (
 func init() {
 	sdl.Register(sdl.Video)
 }
-
-type Window C.SDL_Window
 
 func (window *Window) cptr() *C.SDL_Window {
 	return (*C.SDL_Window)(unsafe.Pointer(window))
