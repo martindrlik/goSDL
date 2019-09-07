@@ -17,8 +17,9 @@ func Text() (string, error) {
 	if cs == nil {
 		return "", errors.New(sdl.Error())
 	}
+	s := C.GoString(cs)
 	C.SDL_free(unsafe.Pointer(cs))
-	return C.GoString(cs), nil
+	return s, nil
 }
 
 // HasText gets a flag indicating whether the clipboard
@@ -29,8 +30,9 @@ func HasText() bool {
 
 // SetText puts UTF-8 text into the clipboard.
 func SetText(text string) error {
-	if C.SDL_SetClipboardText(C.CString(text)) >= 0 {
-		return nil
+	ct := C.CString(text)
+	if C.SDL_SetClipboardText(ct) < 0 {
+		return errors.New(sdl.Error())
 	}
-	return errors.New(sdl.Error())
+	return nil
 }
