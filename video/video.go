@@ -105,7 +105,7 @@ func CreateWindow(title string, x, y, width, height int, flags WindowFlag) (*Win
 		C.int(height),
 		C.Uint32(flags))
 	if window == nil {
-		return nil, sdl.Error(sdl.ErrFailure)
+		return nil, errors.New(sdl.Error())
 	}
 	return (*Window)(unsafe.Pointer(window)), nil
 }
@@ -122,7 +122,7 @@ func CreateWindowAndRenderer(width, height int, flags WindowFlag) (*Window, *Ren
 		C.Uint32(flags),
 		&window,
 		&renderer) != 0 {
-		return nil, nil, sdl.Error(sdl.ErrFailure)
+		return nil, nil, errors.New(sdl.Error())
 	}
 	return (*Window)(unsafe.Pointer(window)), (*Renderer)(unsafe.Pointer(renderer)), nil
 }
@@ -177,7 +177,7 @@ func EnableScreenSaver() {
 func DisplayName(displayIndex int) (string, error) {
 	cs := C.SDL_GetDisplayName(C.int(displayIndex))
 	if cs == nil {
-		return "", sdl.Error(ErrInvalidDisplayIndex)
+		return "", makeError(ErrInvalidDisplayIndex)
 	}
 	return C.GoString(cs), nil
 }
@@ -202,7 +202,7 @@ func NumDrivers() (int, error) {
 
 func intError(result C.int) (int, error) {
 	if result < 0 {
-		return 0, sdl.Error(sdl.ErrFailure)
+		return 0, errors.New(sdl.Error())
 	}
 	return int(result), nil
 }
@@ -226,7 +226,7 @@ type WindowID uint32
 func WindowFromID(windowID WindowID) (*Window, error) {
 	window := C.SDL_GetWindowFromID(C.Uint32(windowID))
 	if window == nil {
-		return nil, sdl.Error(ErrNoWindowForID)
+		return nil, makeError(ErrNoWindowForID)
 	}
 	return (*Window)(unsafe.Pointer(window)), nil
 }
@@ -238,7 +238,7 @@ func WindowFromID(windowID WindowID) (*Window, error) {
 func (window *Window) ID() (WindowID, error) {
 	result := C.SDL_GetWindowID(window.cptr())
 	if result == 0 {
-		return 0, sdl.Error(sdl.ErrFailure)
+		return 0, errors.New(sdl.Error())
 	}
 	return WindowID(result), nil
 }
@@ -319,7 +319,7 @@ func (window *Window) SetBrightness(f float32) error {
 	if C.SDL_SetWindowBrightness(window.cptr(), C.float(f)) >= 0 {
 		return nil
 	}
-	return sdl.Error(sdl.ErrFailure)
+	return errors.New(sdl.Error())
 }
 
 // SDL_SetWindowData
@@ -334,7 +334,7 @@ func (window *Window) SetFullscreen(flags WindowFlag) error {
 	if C.SDL_SetWindowFullscreen(
 		window.cptr(),
 		C.Uint32(flags)) < 0 {
-		return sdl.Error(sdl.ErrFailure)
+		return errors.New(sdl.Error())
 	}
 	return nil
 }
@@ -393,7 +393,7 @@ func ShowSimpleMessageBox(flags MessageBoxFlag, title, message string, parent *W
 		parent.cptr()) >= 0 {
 		return nil
 	}
-	return sdl.Error(sdl.ErrFailure)
+	return errors.New(sdl.Error())
 }
 
 // Show shows a window.

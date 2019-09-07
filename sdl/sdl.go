@@ -3,6 +3,7 @@ package sdl
 // #include <SDL2/SDL.h>
 // #cgo LDFLAGS: -lSDL2
 import "C"
+import "errors"
 
 type Subsystem uint
 
@@ -22,7 +23,7 @@ func Register(subsystem Subsystem) {
 // called before using most other SDL functions.
 func Init() error {
 	if C.SDL_Init(C.uint(subsystems)) < 0 {
-		return Error(ErrFailure)
+		return errors.New(Error())
 	}
 	return nil
 }
