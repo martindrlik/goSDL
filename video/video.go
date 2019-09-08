@@ -86,10 +86,6 @@ var (
 	ErrInvalidDisplayIndex = errors.New("invalid display index or failure")
 )
 
-func init() {
-	sdl.Register(sdl.Video)
-}
-
 func (window *Window) cptr() *C.SDL_Window {
 	return (*C.SDL_Window)(unsafe.Pointer(window))
 }

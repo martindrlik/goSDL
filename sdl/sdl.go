@@ -5,38 +5,57 @@ package sdl
 import "C"
 import "errors"
 
-type Subsystem uint
-
 const (
-	Audio  Subsystem = C.SDL_INIT_AUDIO
-	Video  Subsystem = C.SDL_INIT_VIDEO
-	Events Subsystem = C.SDL_INIT_EVENTS
+	Timer          = C.SDL_INIT_TIMER          // timer subsystem
+	Audio          = C.SDL_INIT_AUDIO          // audio subsystem
+	Video          = C.SDL_INIT_VIDEO          // video subsystem; automatically initializes the events subsystem
+	Joystick       = C.SDL_INIT_JOYSTICK       // joystick subsystem; automatically initializes the events subsystem
+	Haptic         = C.SDL_INIT_HAPTIC         // haptic (force feedback) subsystem
+	GameController = C.SDL_INIT_GAMECONTROLLER // controller subsystem; automatically initializes the joystick subsystem
+	Events         = C.SDL_INIT_EVENTS         // events subsystem
+	Everything     = C.SDL_INIT_EVERYTHING     // all of the above subsystems
+	NoParachute    = C.SDL_INIT_NOPARACHUTE    // compatibility; this flag is ignored
 )
-
-var subsystems Subsystem
-
-func Register(subsystem Subsystem) {
-	subsystems |= subsystem
-}
 
 // Init is used to initialize the SDL library. This must be
 // called before using most other SDL functions.
-func Init() error {
-	if C.SDL_Init(C.uint(subsystems)) < 0 {
+func Init(flags uint) error {
+	cf := C.uint(flags)
+	if C.SDL_Init(cf) < 0 {
 		return errors.New(Error())
 	}
 	return nil
 }
 
-// SDL_InitSubSystem
+// InitSubSystem initializes specific SDL subsystems.
+func InitSubSystem(flags uint) error {
+	cf := C.uint(flags)
+	if C.SDL_InitSubSystem(cf) < 0 {
+		return errors.New(Error())
+	}
+	return nil
+}
 
 // Quit is used to clean up all initialized subsystems.
 // You should call it upon all exit conditions.
-func Quit() {
-	C.SDL_Quit()
+func Quit() { C.SDL_Quit() }
+
+// QuitSubSystem shuts down specific SDL subsystems.
+func QuitSubSystem(flags uint) {
+	cf := C.uint(flags)
+	C.SDL_QuitSubSystem(cf)
 }
 
-// SDL_QuitSubSystem
-// SDL_SetMainReady
-// SDL_WasInit
+// SetMainReady circumvents failure of SDL_Init() when
+// not using SDL_main() as an entry point.
+func SetMainReady() { C.SDL_SetMainReady() }
+
+// WasInit gets a mask of the specified subsystems
+// which have previously been initialized.
+func WasInit(flags uint) uint {
+	cf := C.uint(flags)
+	cm := C.SDL_WasInit(cf)
+	return uint(cm)
+}
+
 // SDL_WinRTRunApp

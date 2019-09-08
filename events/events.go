@@ -6,8 +6,6 @@ import "C"
 
 import (
 	"unsafe"
-
-	"github.com/martindrlik/goSDL/sdl"
 )
 
 const (
@@ -105,10 +103,6 @@ const (
 // SDL_LASTEVENT
 // only for bounding internal arrays
 )
-
-func init() {
-	sdl.Register(sdl.Events)
-}
 
 // Event is a union that contains structures
 // for the different event types.
