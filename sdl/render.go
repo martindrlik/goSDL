@@ -15,8 +15,29 @@ func (renderer *Renderer) cptr() *C.SDL_Renderer {
 	return (*C.SDL_Renderer)(unsafe.Pointer(renderer))
 }
 
-// SDL_ComposeCustomBlendMode
-// SDL_CreateRenderer
+// ComposeCustomBlendMode composes a custom blend mode for renderers.
+func ComposeCustomBlendMode(
+	srcColorFactor, dstColorFactor BlendFactor, colorOperation BlendOperation,
+	srcAlphaFactor, dstAlphaFactor BlendFactor, alphaOperation BlendOperation) BlendMode {
+	cm := C.SDL_ComposeCustomBlendMode(
+		C.SDL_BlendFactor(srcColorFactor),
+		C.SDL_BlendFactor(dstColorFactor),
+		C.SDL_BlendOperation(colorOperation),
+		C.SDL_BlendFactor(srcAlphaFactor),
+		C.SDL_BlendFactor(dstAlphaFactor),
+		C.SDL_BlendOperation(alphaOperation))
+	return BlendMode(cm)
+}
+
+// CreateRenderer creates a 2D rendering context for a window.
+func (w *Window) CreateRenderer(index int, flags uint) (*Renderer, error) {
+	cr := C.SDL_CreateRenderer(w.cptr(), C.int(index), C.uint(flags))
+	if cr == nil {
+		return nil, errors.New(Error())
+	}
+	return (*Renderer)(unsafe.Pointer(cr)), nil
+}
+
 // SDL_CreateSoftwareRenderer
 // SDL_CreateTexture
 // SDL_CreateTextureFromSurface
