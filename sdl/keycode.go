@@ -1,4 +1,4 @@
-package input
+package sdl
 
 // #include <SDL2/SDL_keycode.h>
 import "C"

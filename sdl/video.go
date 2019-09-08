@@ -1,16 +1,12 @@
-package video
+package sdl
 
 // #include <SDL2/SDL_video.h>
 // #include <SDL2/SDL_render.h>
 // #include <SDL2/SDL_messagebox.h>
-// #include <SDL2/SDL_keyboard.h>
-// #cgo LDFLAGS: -lSDL2
 import "C"
 import (
 	"errors"
 	"unsafe"
-
-	"github.com/martindrlik/goSDL/sdl"
 )
 
 type (
@@ -74,15 +70,15 @@ const (
 
 const (
 	// Error is flag for displaying error dialog.
-	Error MessageBoxFlag = C.SDL_MESSAGEBOX_ERROR
+	MsgError MessageBoxFlag = C.SDL_MESSAGEBOX_ERROR
 	// Warning is flag for displaying warning dialog.
-	Warning MessageBoxFlag = C.SDL_MESSAGEBOX_WARNING
+	MsgWarning MessageBoxFlag = C.SDL_MESSAGEBOX_WARNING
 	// Information is flag for displaying informational dialog.
-	Information MessageBoxFlag = C.SDL_MESSAGEBOX_INFORMATION
+	MsgInformation MessageBoxFlag = C.SDL_MESSAGEBOX_INFORMATION
 )
 
 var (
-	ErrNoWindowForID       = errors.New("no window associated with given windowID")
+	ErrNoWindowForID       = errors.New("no window associated with given id")
 	ErrInvalidDisplayIndex = errors.New("invalid display index or failure")
 )
 
@@ -101,7 +97,7 @@ func CreateWindow(title string, x, y, width, height int, flags WindowFlag) (*Win
 		C.int(height),
 		C.Uint32(flags))
 	if window == nil {
-		return nil, errors.New(sdl.Error())
+		return nil, errors.New(Error())
 	}
 	return (*Window)(unsafe.Pointer(window)), nil
 }
@@ -118,7 +114,7 @@ func CreateWindowAndRenderer(width, height int, flags WindowFlag) (*Window, *Ren
 		C.Uint32(flags),
 		&window,
 		&renderer) != 0 {
-		return nil, nil, errors.New(sdl.Error())
+		return nil, nil, errors.New(Error())
 	}
 	return (*Window)(unsafe.Pointer(window)), (*Renderer)(unsafe.Pointer(renderer)), nil
 }
@@ -198,7 +194,7 @@ func NumDrivers() (int, error) {
 
 func intError(result C.int) (int, error) {
 	if result < 0 {
-		return 0, errors.New(sdl.Error())
+		return 0, errors.New(Error())
 	}
 	return int(result), nil
 }
@@ -216,11 +212,10 @@ func (window *Window) Brightness() float32 {
 // SDL_GetWindowDisplayMode
 // SDL_GetWindowFlags
 
-type WindowID uint32
-
 // WindowFromID gets a window from a stored ID.
-func WindowFromID(windowID WindowID) (*Window, error) {
-	window := C.SDL_GetWindowFromID(C.Uint32(windowID))
+func WindowFromID(id uint32) (*Window, error) {
+	cid := C.Uint32(id)
+	window := C.SDL_GetWindowFromID(cid)
 	if window == nil {
 		return nil, makeError(ErrNoWindowForID)
 	}
@@ -231,12 +226,12 @@ func WindowFromID(windowID WindowID) (*Window, error) {
 // SDL_GetWindowGrab
 
 // ID gets the numeric ID of a window, for logging purposes.
-func (window *Window) ID() (WindowID, error) {
-	result := C.SDL_GetWindowID(window.cptr())
-	if result == 0 {
-		return 0, errors.New(sdl.Error())
+func (window *Window) ID() (uint32, error) {
+	cid := C.SDL_GetWindowID(window.cptr())
+	if cid == 0 {
+		return 0, errors.New(Error())
 	}
-	return WindowID(result), nil
+	return uint32(cid), nil
 }
 
 // MaximumSize gets the maximum size of a window's client area.
@@ -315,7 +310,7 @@ func (window *Window) SetBrightness(f float32) error {
 	if C.SDL_SetWindowBrightness(window.cptr(), C.float(f)) >= 0 {
 		return nil
 	}
-	return errors.New(sdl.Error())
+	return errors.New(Error())
 }
 
 // SDL_SetWindowData
@@ -330,7 +325,7 @@ func (window *Window) SetFullscreen(flags WindowFlag) error {
 	if C.SDL_SetWindowFullscreen(
 		window.cptr(),
 		C.Uint32(flags)) < 0 {
-		return errors.New(sdl.Error())
+		return errors.New(Error())
 	}
 	return nil
 }
@@ -389,7 +384,7 @@ func ShowSimpleMessageBox(flags MessageBoxFlag, title, message string, parent *W
 		parent.cptr()) >= 0 {
 		return nil
 	}
-	return errors.New(sdl.Error())
+	return errors.New(Error())
 }
 
 // Show shows a window.
@@ -401,18 +396,3 @@ func (window *Window) Show() {
 // SDL_UpdateWindowSurfaceRects
 // SDL_VideoInit
 // SDL_VideoQuit
-
-// Input
-
-// KeyboardFocus gets the window which currently has keyboard focus.
-func KeyboardFocus() *Window {
-	cw := C.SDL_GetKeyboardFocus()
-	return (*Window)(unsafe.Pointer(cw))
-}
-
-// IsScreenKeyboardShown checks whether the screen keyboard
-// is shown for given window.
-func (window *Window) IsScreenKeyboardShown() bool {
-	f := C.SDL_IsScreenKeyboardShown(window.cptr())
-	return f == C.SDL_TRUE
-}

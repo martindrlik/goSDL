@@ -1,4 +1,4 @@
-package input
+package sdl
 
 // #include <SDL2/SDL_keyboard.h>
 import "C"
@@ -110,4 +110,17 @@ func StartTextInput() {
 // StopTextInput stops receiving any text input events.
 func StopTextInput() {
 	C.SDL_StopTextInput()
+}
+
+// KeyboardFocus gets the window which currently has keyboard focus.
+func KeyboardFocus() *Window {
+	cw := C.SDL_GetKeyboardFocus()
+	return (*Window)(unsafe.Pointer(cw))
+}
+
+// IsScreenKeyboardShown checks whether the screen keyboard
+// is shown for given window.
+func (window *Window) IsScreenKeyboardShown() bool {
+	f := C.SDL_IsScreenKeyboardShown(window.cptr())
+	return f == C.SDL_TRUE
 }

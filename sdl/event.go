@@ -1,7 +1,6 @@
-package events
+package sdl
 
 // #include <SDL2/SDL_events.h>
-// #cgo LDFLAGS: -lSDL2
 import "C"
 
 import (
@@ -11,55 +10,55 @@ import (
 const (
 	// 	Application events
 
-	Quit = C.SDL_QUIT // user-requested quit; see Remarks for details
+	EvQuit = C.SDL_QUIT // user-requested quit; see Remarks for details
 
 	// Android, iOS and WinRT events; see Remarks for details
 
-	AppTerminating         = C.SDL_APP_TERMINATING         // OS is terminating the application
-	AppLowMemory           = C.SDL_APP_LOWMEMORY           // OS is low on memory; free some
-	AppWillEnterBackground = C.SDL_APP_WILLENTERBACKGROUND // application is entering background
-	AppDidEnterBackground  = C.SDL_APP_DIDENTERBACKGROUND  // application entered background
-	AppWillEnterForeground = C.SDL_APP_WILLENTERFOREGROUND // application is entering foreground
-	AppDidEnterForeground  = C.SDL_APP_DIDENTERFOREGROUND  // application entered foreground
+	EvAppTerminating         = C.SDL_APP_TERMINATING         // OS is terminating the application
+	EvAppLowMemory           = C.SDL_APP_LOWMEMORY           // OS is low on memory; free some
+	EvAppWillEnterBackground = C.SDL_APP_WILLENTERBACKGROUND // application is entering background
+	EvAppDidEnterBackground  = C.SDL_APP_DIDENTERBACKGROUND  // application entered background
+	EvAppWillEnterForeground = C.SDL_APP_WILLENTERFOREGROUND // application is entering foreground
+	EvAppDidEnterForeground  = C.SDL_APP_DIDENTERFOREGROUND  // application entered foreground
 
 	// Window events
 
-	WindowEvent = C.SDL_WINDOWEVENT // window state change
-	SysWMEvent  = C.SDL_SYSWMEVENT  // system specific event
+	EvWindowEvent = C.SDL_WINDOWEVENT // window state change
+	EvSysWMEvent  = C.SDL_SYSWMEVENT  // system specific event
 
 	// Keyboard events
 
-	KeyDown       = C.SDL_KEYDOWN       // key pressed
-	KeyUp         = C.SDL_KEYUP         // key released
-	TextEditing   = C.SDL_TEXTEDITING   // keyboard text editing (composition)
-	TextInput     = C.SDL_TEXTINPUT     // keyboard text input
-	KeymapChanged = C.SDL_KEYMAPCHANGED // keymap changed due to a system event such as an input language or keyboard layout change (>= SDL 2.0.4)
+	EvKeyDown       = C.SDL_KEYDOWN       // key pressed
+	EvKeyUp         = C.SDL_KEYUP         // key released
+	EvTextEditing   = C.SDL_TEXTEDITING   // keyboard text editing (composition)
+	EvTextInput     = C.SDL_TEXTINPUT     // keyboard text input
+	EvKeymapChanged = C.SDL_KEYMAPCHANGED // keymap changed due to a system event such as an input language or keyboard layout change (>= SDL 2.0.4)
 
 	// Mouse events
 
-	MouseMotion     = C.SDL_MOUSEMOTION     // mouse moved
-	MouseButtonDown = C.SDL_MOUSEBUTTONDOWN // mouse button pressed
-	MouseButtonUp   = C.SDL_MOUSEBUTTONUP   // mouse button released
-	MouseWheel      = C.SDL_MOUSEWHEEL      // mouse wheel motion
+	EvMouseMotion     = C.SDL_MOUSEMOTION     // mouse moved
+	EvMouseButtonDown = C.SDL_MOUSEBUTTONDOWN // mouse button pressed
+	EvMouseButtonUp   = C.SDL_MOUSEBUTTONUP   // mouse button released
+	EvMouseWheel      = C.SDL_MOUSEWHEEL      // mouse wheel motion
 
 	// Joystick events
 
-	JoyAxisMotion    = C.SDL_JOYAXISMOTION    // joystick axis motion
-	JoyBallMotion    = C.SDL_JOYBALLMOTION    // joystick trackball motion
-	JoyHatmotion     = C.SDL_JOYHATMOTION     // joystick hat position change
-	JoyButtonDown    = C.SDL_JOYBUTTONDOWN    // joystick button pressed
-	JoyButtonUp      = C.SDL_JOYBUTTONUP      // joystick button released
-	JoyDeviceAdded   = C.SDL_JOYDEVICEADDED   // joystick connected
-	JoyDeviceRemoved = C.SDL_JOYDEVICEREMOVED // joystick disconnected
+	EvJoyAxisMotion    = C.SDL_JOYAXISMOTION    // joystick axis motion
+	EvJoyBallMotion    = C.SDL_JOYBALLMOTION    // joystick trackball motion
+	EvJoyHatmotion     = C.SDL_JOYHATMOTION     // joystick hat position change
+	EvJoyButtonDown    = C.SDL_JOYBUTTONDOWN    // joystick button pressed
+	EvJoyButtonUp      = C.SDL_JOYBUTTONUP      // joystick button released
+	EvJoyDeviceAdded   = C.SDL_JOYDEVICEADDED   // joystick connected
+	EvJoyDeviceRemoved = C.SDL_JOYDEVICEREMOVED // joystick disconnected
 
 	// Controller events
 
-	ControllerAxisMotion     = C.SDL_CONTROLLERAXISMOTION     // controller axis motion
-	ControllerButtonDown     = C.SDL_CONTROLLERBUTTONDOWN     // controller button pressed
-	ControllerButtonUp       = C.SDL_CONTROLLERBUTTONUP       // controller button released
-	ControllerDeviceAdded    = C.SDL_CONTROLLERDEVICEADDED    // controller connected
-	ControllerDeviceRemoved  = C.SDL_CONTROLLERDEVICEREMOVED  // controller disconnected
-	ControllerDeviceRemapped = C.SDL_CONTROLLERDEVICEREMAPPED // controller mapping updated
+	EvControllerAxisMotion     = C.SDL_CONTROLLERAXISMOTION     // controller axis motion
+	EvControllerButtonDown     = C.SDL_CONTROLLERBUTTONDOWN     // controller button pressed
+	EvControllerButtonUp       = C.SDL_CONTROLLERBUTTONUP       // controller button released
+	EvControllerDeviceAdded    = C.SDL_CONTROLLERDEVICEADDED    // controller connected
+	EvControllerDeviceRemoved  = C.SDL_CONTROLLERDEVICEREMOVED  // controller disconnected
+	EvControllerDeviceRemapped = C.SDL_CONTROLLERDEVICEREMAPPED // controller mapping updated
 
 	// Touch events
 
@@ -76,7 +75,7 @@ const (
 
 	// Clipboard events
 
-	ClipboardUpdate = C.SDL_CLIPBOARDUPDATE // the clipboard changed
+	EvClipboardUpdate = C.SDL_CLIPBOARDUPDATE // the clipboard changed
 
 // Drag and drop events
 // SDL_DROPFILE

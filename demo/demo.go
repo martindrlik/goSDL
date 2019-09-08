@@ -3,9 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/martindrlik/goSDL/events"
 	"github.com/martindrlik/goSDL/sdl"
-	"github.com/martindrlik/goSDL/video"
 )
 
 func main() {
@@ -13,21 +11,21 @@ func main() {
 	if err := sdl.Init(sdl.Video | sdl.Events); err != nil {
 		log.Fatalf("could not initialize subsystems: %v", err)
 	}
-	w, r := mustWR(video.CreateWindowAndRenderer(640, 480, video.Resizable))
+	w, r := mustWR(sdl.CreateWindowAndRenderer(640, 480, sdl.Resizable))
 	defer r.Destroy()
 	defer w.Destroy()
 	b := w.Brightness()
 	defer func() { w.SetBrightness(b) }()
 	w.SetBrightness(1.5)
-	var ev events.Event
+	var ev sdl.Event
 	points := []struct{ X, Y int32 }{
 		{10, 20},
 		{30, 40},
 		{50, 60},
 	}
 	for {
-		events.PollEvent(&ev)
-		if ev.Type == events.Quit {
+		sdl.PollEvent(&ev)
+		if ev.Type == sdl.EvQuit {
 			break
 		}
 		check(r.SetRenderDrawColor(0, 0, 0, 255), "unable to set color for clear")
@@ -42,7 +40,7 @@ func main() {
 	}
 }
 
-func mustWR(window *video.Window, renderer *video.Renderer, err error) (*video.Window, *video.Renderer) {
+func mustWR(window *sdl.Window, renderer *sdl.Renderer, err error) (*sdl.Window, *sdl.Renderer) {
 	if err != nil {
 		log.Fatalf("could not create window and renderer: %v", err)
 	}

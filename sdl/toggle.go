@@ -3,10 +3,8 @@ package sdl
 // #include <SDL2/SDL.h>
 import "C"
 
-type Toggle int
-
 const (
-	ToggleDisable Toggle = C.SDL_DISABLE
-	ToggleEnable         = C.SDL_ENABLE
-	ToggleQuery          = C.SDL_QUERY
+	Disable = C.SDL_DISABLE
+	Enable  = C.SDL_ENABLE
+	Query   = C.SDL_QUERY
 )

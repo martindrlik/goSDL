@@ -1,11 +1,9 @@
-package input
+package sdl
 
 // #include <SDL2/SDL_mouse.h>
 import "C"
 import (
 	"errors"
-
-	"github.com/martindrlik/goSDL/sdl"
 )
 
 func cbool(b bool) C.SDL_bool {
@@ -19,7 +17,7 @@ func cbool(b bool) C.SDL_bool {
 func CaptureMouse(enabled bool) error {
 	cb := cbool(enabled)
 	if C.SDL_CaptureMouse(cb) == -1 {
-		return errors.New(sdl.Error())
+		return errors.New(Error())
 	}
 	return nil
 }
@@ -39,13 +37,13 @@ func CaptureMouse(enabled bool) error {
 // SDL_SetRelativeMouseMode
 
 // ShowCursor toggles whether or not the cursor is shown.
-func ShowCursor(toggle sdl.Toggle) (sdl.Toggle, error) {
+func ShowCursor(toggle int) (int, error) {
 	ct := C.int(toggle)
 	cu := C.SDL_ShowCursor(ct)
 	if cu < 0 {
-		return 0, errors.New(sdl.Error())
+		return 0, errors.New(Error())
 	}
-	return sdl.Toggle(cu), nil
+	return int(cu), nil
 }
 
 // SDL_WarpMouseGlobal

@@ -1,4 +1,4 @@
-package video
+package sdl
 
 // #include <SDL2/SDL_render.h>
 import "C"
@@ -6,8 +6,6 @@ import "C"
 import (
 	"errors"
 	"unsafe"
-
-	"github.com/martindrlik/goSDL/sdl"
 )
 
 // Renderer contains a rendering state.
@@ -51,7 +49,7 @@ func (renderer *Renderer) Destroy() {
 // target with the drawing color.
 func (renderer *Renderer) RenderClear() error {
 	if C.SDL_RenderClear(renderer.cptr()) < 0 {
-		return errors.New(sdl.Error())
+		return errors.New(Error())
 	}
 	return nil
 }
@@ -67,7 +65,7 @@ func (renderer *Renderer) RenderDrawLine(x1, y1, x2, y2 int) error {
 		C.int(y1),
 		C.int(x2),
 		C.int(y2)) < 0 {
-		return errors.New(sdl.Error())
+		return errors.New(Error())
 	}
 	return nil
 }
@@ -80,7 +78,7 @@ func (renderer *Renderer) RenderDrawPoint(x, y int) error {
 		renderer.cptr(),
 		C.int(x),
 		C.int(y)) < 0 {
-		return errors.New(sdl.Error())
+		return errors.New(Error())
 	}
 	return nil
 }
@@ -91,7 +89,7 @@ func (renderer *Renderer) RenderDrawPoints(points []struct{ X, Y int32 }) error 
 		renderer.cptr(),
 		(*C.SDL_Point)(unsafe.Pointer(&points[0])),
 		C.int(len(points))) < 0 {
-		return errors.New(sdl.Error())
+		return errors.New(Error())
 	}
 	return nil
 }
@@ -131,7 +129,7 @@ func (renderer *Renderer) SetRenderDrawColor(r, g, b, a uint8) error {
 		C.Uint8(g),
 		C.Uint8(b),
 		C.Uint8(a)) < 0 {
-		return errors.New(sdl.Error())
+		return errors.New(Error())
 	}
 	return nil
 }
