@@ -9,72 +9,68 @@ import (
 	"unsafe"
 )
 
-type (
-	WindowFlag     C.SDL_WindowFlags
-	MessageBoxFlag C.SDL_MessageBoxFlags
-	Window         C.SDL_Window
-)
+type Window C.SDL_Window
 
 const (
 	// Fullscreen is flag for fullscreen window.
-	Fullscreen WindowFlag = C.SDL_WINDOW_FULLSCREEN
+	Fullscreen = C.SDL_WINDOW_FULLSCREEN
 	// FullscreenDesktop is flag for fullscreen window
 	// at the current desktop resolution.
-	FullscreenDesktop WindowFlag = C.SDL_WINDOW_FULLSCREEN_DESKTOP
+	FullscreenDesktop = C.SDL_WINDOW_FULLSCREEN_DESKTOP
 
 	// SDL_WINDOW_OPENGL window usable with OpenGL context
 
 	// Shown is flag for window is visible.
-	Shown WindowFlag = C.SDL_WINDOW_SHOWN
+	Shown = C.SDL_WINDOW_SHOWN
 	// Hidden is flag for window is not visible.
-	Hidden WindowFlag = C.SDL_WINDOW_HIDDEN
+	Hidden = C.SDL_WINDOW_HIDDEN
 	// Borderless is flag for no window decoration.
-	Borderless WindowFlag = C.SDL_WINDOW_BORDERLESS
+	Borderless = C.SDL_WINDOW_BORDERLESS
 	// Resizable is flag for that window can be resized.
-	Resizable WindowFlag = C.SDL_WINDOW_RESIZABLE
+	Resizable = C.SDL_WINDOW_RESIZABLE
 	// Minimized is flag for window is minimized.
-	Minimized WindowFlag = C.SDL_WINDOW_MINIMIZED
+	Minimized = C.SDL_WINDOW_MINIMIZED
 	// Maximized is flag for window is maximized.
-	Maximized WindowFlag = C.SDL_WINDOW_MAXIMIZED
+	Maximized = C.SDL_WINDOW_MAXIMIZED
 	// InputGrabbed is flag for window has grabbed input focus.
-	InputGrabbed WindowFlag = C.SDL_WINDOW_INPUT_GRABBED
+	InputGrabbed = C.SDL_WINDOW_INPUT_GRABBED
 	// InputFocus is flag for window has input focus.
-	InputFocus WindowFlag = C.SDL_WINDOW_INPUT_FOCUS
+	InputFocus = C.SDL_WINDOW_INPUT_FOCUS
 	// MouseFocus is flag for window has mouse focus.
-	MouseFocus WindowFlag = C.SDL_WINDOW_MOUSE_FOCUS
+	MouseFocus = C.SDL_WINDOW_MOUSE_FOCUS
 
 	// SDL_WINDOW_FOREIGN window not created by SDL
 
 	// AllowHighDPI is flag for that window should be created in
 	// high-DPI mode if supported (>WindowFlag = SDL 2.0.1).
-	AllowHighDPI WindowFlag = C.SDL_WINDOW_ALLOW_HIGHDPI
+	AllowHighDPI = C.SDL_WINDOW_ALLOW_HIGHDPI
 	// MouseCapture is flag for that window has mouse
 	// captured (unrelated to INPUT_GRABBED, >WindowFlag = SDL 2.0.4).
-	MouseCapture WindowFlag = C.SDL_WINDOW_MOUSE_CAPTURE
+	MouseCapture = C.SDL_WINDOW_MOUSE_CAPTURE
 	// AlwaysOnTop is flag for that window should always be
 	// above others (X11 only, >WindowFlag = SDL 2.0.5).
-	AlwaysOnTop WindowFlag = C.SDL_WINDOW_ALWAYS_ON_TOP
+	AlwaysOnTop = C.SDL_WINDOW_ALWAYS_ON_TOP
 	// SkipTaskbar is flag for that window should not be added to
 	// the taskbar (X11 only, >WindowFlag = SDL 2.0.5).
-	SkipTaskbar WindowFlag = C.SDL_WINDOW_SKIP_TASKBAR
+	SkipTaskbar = C.SDL_WINDOW_SKIP_TASKBAR
 	// Utility is flag for that window should be treated as
 	// a utility window (X11 only, >WindowFlag = SDL 2.0.5).
-	Utility WindowFlag = C.SDL_WINDOW_UTILITY
+	Utility = C.SDL_WINDOW_UTILITY
 	// Tooltip is flag for that window should be treated as
 	// a tooltip (X11 only, >WindowFlag = SDL 2.0.5).
-	Tooltip WindowFlag = C.SDL_WINDOW_TOOLTIP
+	Tooltip = C.SDL_WINDOW_TOOLTIP
 	// PopupMenu is flag for that window should be treated as
 	// a popup menu (X11 only, >WindowFlag = SDL 2.0.5).
-	PopupMenu WindowFlag = C.SDL_WINDOW_POPUP_MENU
+	PopupMenu = C.SDL_WINDOW_POPUP_MENU
 )
 
 const (
-	// Error is flag for displaying error dialog.
-	MsgError MessageBoxFlag = C.SDL_MESSAGEBOX_ERROR
-	// Warning is flag for displaying warning dialog.
-	MsgWarning MessageBoxFlag = C.SDL_MESSAGEBOX_WARNING
-	// Information is flag for displaying informational dialog.
-	MsgInformation MessageBoxFlag = C.SDL_MESSAGEBOX_INFORMATION
+	// MsgError is flag for displaying error dialog.
+	MsgError = C.SDL_MESSAGEBOX_ERROR
+	// MsgWarning is flag for displaying warning dialog.
+	MsgWarning = C.SDL_MESSAGEBOX_WARNING
+	// MsgInformation is flag for displaying informational dialog.
+	MsgInformation = C.SDL_MESSAGEBOX_INFORMATION
 )
 
 var (
@@ -82,48 +78,51 @@ var (
 	ErrInvalidDisplayIndex = errors.New("invalid display index or failure")
 )
 
-func (window *Window) cptr() *C.SDL_Window {
-	return (*C.SDL_Window)(unsafe.Pointer(window))
+func (w *Window) cptr() *C.SDL_Window {
+	return (*C.SDL_Window)(unsafe.Pointer(w))
 }
 
 // CreateWindow creates a window with the specified
 // position, dimensions, and flags.
-func CreateWindow(title string, x, y, width, height int, flags WindowFlag) (*Window, error) {
-	window := C.SDL_CreateWindow(
+func CreateWindow(title string, x, y, width, height int, flags uint32) (*Window, error) {
+	cw := C.SDL_CreateWindow(
 		C.CString(title),
 		C.int(x),
 		C.int(y),
 		C.int(width),
 		C.int(height),
 		C.Uint32(flags))
-	if window == nil {
+	if cw == nil {
 		return nil, errors.New(Error())
 	}
-	return (*Window)(unsafe.Pointer(window)), nil
+	w := (*Window)(unsafe.Pointer(cw))
+	return w, nil
 }
 
 // CreateWindowAndRenderer creates a window and default renderer.
-func CreateWindowAndRenderer(width, height int, flags WindowFlag) (*Window, *Renderer, error) {
+func CreateWindowAndRenderer(width, height int, flags uint32) (*Window, *Renderer, error) {
 	var (
-		window   *C.SDL_Window
-		renderer *C.SDL_Renderer
+		cw *C.SDL_Window
+		cr *C.SDL_Renderer
 	)
 	if C.SDL_CreateWindowAndRenderer(
 		C.int(width),
 		C.int(height),
 		C.Uint32(flags),
-		&window,
-		&renderer) != 0 {
+		&cw,
+		&cr) != 0 {
 		return nil, nil, errors.New(Error())
 	}
-	return (*Window)(unsafe.Pointer(window)), (*Renderer)(unsafe.Pointer(renderer)), nil
+	w := (*Window)(unsafe.Pointer(cw))
+	r := (*Renderer)(unsafe.Pointer(cr))
+	return w, r, nil
 }
 
 // SDL_CreateWindowFrom
 
 // Destroy destroys a window.
-func (window *Window) Destroy() {
-	C.SDL_DestroyWindow(window.cptr())
+func (w *Window) Destroy() {
+	C.SDL_DestroyWindow(w.cptr())
 }
 
 // DisableScreenSaver prevents the screen from
@@ -203,8 +202,8 @@ func intError(result C.int) (int, error) {
 // SDL_GetWindowBordersSize
 
 // Brightness gets the brightness (gamma multiplier) for the display that owns this window.
-func (window *Window) Brightness() float32 {
-	return float32(C.SDL_GetWindowBrightness(window.cptr()))
+func (w *Window) Brightness() float32 {
+	return float32(C.SDL_GetWindowBrightness(w.cptr()))
 }
 
 // SDL_GetWindowData
@@ -215,19 +214,19 @@ func (window *Window) Brightness() float32 {
 // WindowFromID gets a window from a stored ID.
 func WindowFromID(id uint32) (*Window, error) {
 	cid := C.Uint32(id)
-	window := C.SDL_GetWindowFromID(cid)
-	if window == nil {
+	w := C.SDL_GetWindowFromID(cid)
+	if w == nil {
 		return nil, makeError(ErrNoWindowForID)
 	}
-	return (*Window)(unsafe.Pointer(window)), nil
+	return (*Window)(unsafe.Pointer(w)), nil
 }
 
 // SDL_GetWindowGammaRamp
 // SDL_GetWindowGrab
 
 // ID gets the numeric ID of a window, for logging purposes.
-func (window *Window) ID() (uint32, error) {
-	cid := C.SDL_GetWindowID(window.cptr())
+func (w *Window) ID() (uint32, error) {
+	cid := C.SDL_GetWindowID(w.cptr())
 	if cid == 0 {
 		return 0, errors.New(Error())
 	}
@@ -235,79 +234,79 @@ func (window *Window) ID() (uint32, error) {
 }
 
 // MaximumSize gets the maximum size of a window's client area.
-func (window *Window) MaximumSize() (maximumWidth, maximumHeight int) {
-	var w, h C.int
-	C.SDL_GetWindowMaximumSize(window.cptr(), &w, &h)
-	return int(w), int(h)
+func (w *Window) MaximumSize() (maximumWidth, maximumHeight int) {
+	var x, y C.int
+	C.SDL_GetWindowMaximumSize(w.cptr(), &x, &y)
+	return int(x), int(y)
 }
 
 // MinimumSize gets the minimum size of a window's client area.
-func (window *Window) MinimumSize() (minimumWidth, minimumHeight int) {
-	var w, h C.int
-	C.SDL_GetWindowMinimumSize(window.cptr(), &w, &h)
-	return int(w), int(h)
+func (w *Window) MinimumSize() (minimumWidth, minimumHeight int) {
+	var x, y C.int
+	C.SDL_GetWindowMinimumSize(w.cptr(), &x, &y)
+	return int(x), int(y)
 }
 
 // SDL_GetWindowOpacity
 // SDL_GetWindowPixelFormat
 
 // Position gets the position of a window.
-func (window *Window) Position() (x, y int) {
+func (w *Window) Position() (x, y int) {
 	var px, py C.int
-	C.SDL_GetWindowPosition(window.cptr(), &px, &py)
+	C.SDL_GetWindowPosition(w.cptr(), &px, &py)
 	return int(px), int(py)
 }
 
 // Size gets the size of a window's client area.
-func (window *Window) Size() (width, height int) {
-	var w, h C.int
-	C.SDL_GetWindowSize(window.cptr(), &w, &h)
-	return int(w), int(h)
+func (w *Window) Size() (width, height int) {
+	var x, y C.int
+	C.SDL_GetWindowSize(w.cptr(), &x, &y)
+	return int(x), int(y)
 }
 
 // SDL_GetWindowSurface
 
 // Title gets the title of a window.
-func (window *Window) Title() string {
-	return C.GoString(C.SDL_GetWindowTitle(window.cptr()))
+func (w *Window) Title() string {
+	return C.GoString(C.SDL_GetWindowTitle(w.cptr()))
 }
 
 // SDL_GetWindowWMInfo
 
 // Hide hides a window.
-func (window *Window) Hide() {
-	C.SDL_HideWindow(window.cptr())
+func (w *Window) Hide() {
+	C.SDL_HideWindow(w.cptr())
 }
 
 // SDL_IsScreenSaverEnabled
 
 // Maximize makes a window as large as possible.
-func (window *Window) Maximize() {
-	C.SDL_MaximizeWindow(window.cptr())
+func (w *Window) Maximize() {
+	C.SDL_MaximizeWindow(w.cptr())
 }
 
 // Minimize minimizes a window to an iconic representation.
-func (window *Window) Minimize() {
-	C.SDL_MinimizeWindow(window.cptr())
+func (w *Window) Minimize() {
+	C.SDL_MinimizeWindow(w.cptr())
 }
 
 // Raise raises a window above other windows and set the input focus.
-func (window *Window) Raise() {
-	C.SDL_RaiseWindow(window.cptr())
+func (w *Window) Raise() {
+	C.SDL_RaiseWindow(w.cptr())
 }
 
 // Restore restores the size and position of a minimized
 // or maximized window.
-func (window *Window) Restore() {
-	C.SDL_RestoreWindow(window.cptr())
+func (w *Window) Restore() {
+	C.SDL_RestoreWindow(w.cptr())
 }
 
 // SDL_SetWindowBordered
 
 // SetBrightness sets the brightness (gamma multiplier) for the display that owns this window.
 // Brightness f value should be set where 0.0 is completely dark and 1.0 is normal brightness.
-func (window *Window) SetBrightness(f float32) error {
-	if C.SDL_SetWindowBrightness(window.cptr(), C.float(f)) >= 0 {
+func (w *Window) SetBrightness(f float32) error {
+	if C.SDL_SetWindowBrightness(w.cptr(), C.float(f)) >= 0 {
 		return nil
 	}
 	return errors.New(Error())
@@ -321,9 +320,9 @@ func (window *Window) SetBrightness(f float32) error {
 // Flags may be Fullscreen, for "real" fullscreen with a videomode change;
 // FullscreenDesktop for "fake" fullscreen that takes the size of the desktop;
 // and 0 for windowed mode.
-func (window *Window) SetFullscreen(flags WindowFlag) error {
+func (w *Window) SetFullscreen(flags uint32) error {
 	if C.SDL_SetWindowFullscreen(
-		window.cptr(),
+		w.cptr(),
 		C.Uint32(flags)) < 0 {
 		return errors.New(Error())
 	}
@@ -337,46 +336,46 @@ func (window *Window) SetFullscreen(flags WindowFlag) error {
 // SDL_SetWindowInputFocus
 
 // SetMaximumSize sets the maximum size of a window's client area.
-func (window *Window) SetMaximumSize(maximumWidth, maximumHeight int) {
-	C.SDL_SetWindowMaximumSize(window.cptr(), C.int(maximumWidth), C.int(maximumHeight))
+func (w *Window) SetMaximumSize(maximumWidth, maximumHeight int) {
+	C.SDL_SetWindowMaximumSize(w.cptr(), C.int(maximumWidth), C.int(maximumHeight))
 }
 
 // SetMinimumSize set the minimum size of a window's client area.
-func (window *Window) SetMinimumSize(minimumWidth, minimumHeight int) {
-	C.SDL_SetWindowMinimumSize(window.cptr(), C.int(minimumWidth), C.int(minimumHeight))
+func (w *Window) SetMinimumSize(minimumWidth, minimumHeight int) {
+	C.SDL_SetWindowMinimumSize(w.cptr(), C.int(minimumWidth), C.int(minimumHeight))
 }
 
 // SDL_SetWindowModalFor
 // SDL_SetWindowOpacity
 
 // SetPosition sets the position of a window.
-func (window *Window) SetPosition(x, y int) {
-	C.SDL_SetWindowPosition(window.cptr(), C.int(x), C.int(y))
+func (w *Window) SetPosition(x, y int) {
+	C.SDL_SetWindowPosition(w.cptr(), C.int(x), C.int(y))
 }
 
 // SetResizable sets the user-resizable state of a window.
-func (window *Window) SetResizable(isResizable bool) {
+func (w *Window) SetResizable(isResizable bool) {
 	if isResizable {
-		C.SDL_SetWindowResizable(window.cptr(), C.SDL_TRUE)
+		C.SDL_SetWindowResizable(w.cptr(), C.SDL_TRUE)
 	} else {
-		C.SDL_SetWindowResizable(window.cptr(), C.SDL_FALSE)
+		C.SDL_SetWindowResizable(w.cptr(), C.SDL_FALSE)
 	}
 }
 
 // SetSize sets the size of a window's client area.
-func (window *Window) SetSize(width, height int) {
-	C.SDL_SetWindowSize(window.cptr(), C.int(width), C.int(height))
+func (w *Window) SetSize(width, height int) {
+	C.SDL_SetWindowSize(w.cptr(), C.int(width), C.int(height))
 }
 
 // SetTitle sets the title of a window.
-func (window *Window) SetTitle(title string) {
-	C.SDL_SetWindowTitle(window.cptr(), C.CString(title))
+func (w *Window) SetTitle(title string) {
+	C.SDL_SetWindowTitle(w.cptr(), C.CString(title))
 }
 
 // SDL_ShowMessageBox
 
 // ShowSimpleMessageBox displays a simple modal message box.
-func ShowSimpleMessageBox(flags MessageBoxFlag, title, message string, parent *Window) error {
+func ShowSimpleMessageBox(flags uint32, title, message string, parent *Window) error {
 	if C.SDL_ShowSimpleMessageBox(
 		C.Uint32(flags),
 		C.CString(title),
@@ -388,8 +387,8 @@ func ShowSimpleMessageBox(flags MessageBoxFlag, title, message string, parent *W
 }
 
 // Show shows a window.
-func (window *Window) Show() {
-	C.SDL_ShowWindow(window.cptr())
+func (w *Window) Show() {
+	C.SDL_ShowWindow(w.cptr())
 }
 
 // SDL_UpdateWindowSurface
