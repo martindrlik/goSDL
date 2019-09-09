@@ -5,15 +5,9 @@ import "C"
 
 import (
 	"errors"
+	"image"
 	"unsafe"
 )
-
-// Renderer contains a rendering state.
-type Renderer C.SDL_Renderer
-
-func (renderer *Renderer) cptr() *C.SDL_Renderer {
-	return (*C.SDL_Renderer)(unsafe.Pointer(renderer))
-}
 
 // ComposeCustomBlendMode composes a custom blend mode for renderers.
 func ComposeCustomBlendMode(
@@ -38,18 +32,18 @@ func (w *Window) CreateRenderer(index int, flags uint) (*Renderer, error) {
 	return (*Renderer)(unsafe.Pointer(cr)), nil
 }
 
-// SDL_CreateSoftwareRenderer
-// SDL_CreateTexture
+// CreateSoftwareRenderer creates a 2D software rendering context for a surface.
+func (s *Surface) CreateSoftwareRenderer() (*Renderer, error) {
+	cr := C.SDL_CreateSoftwareRenderer(s.cptr())
+	if cr == nil {
+		return nil, errors.New(Error())
+	}
+	return (*Renderer)(unsafe.Pointer(cr)), nil
+}
+
 // SDL_CreateTextureFromSurface
 // SDL_CreateWindowAndRenderer
 
-// Destroy destroys the rendering context for
-// a window and free associated textures.
-func (renderer *Renderer) Destroy() {
-	C.SDL_DestroyRenderer(renderer.cptr())
-}
-
-// SDL_DestroyTexture
 // SDL_GL_BindTexture
 // SDL_GL_UnbindTexture
 // SDL_GetNumRenderDrivers
@@ -66,22 +60,44 @@ func (renderer *Renderer) Destroy() {
 // SDL_LockTexture
 // SDL_QueryTexture
 
-// RenderClear clears the current rendering
+// Renderer contains a rendering state.
+type Renderer C.SDL_Renderer
+
+func (re *Renderer) cptr() *C.SDL_Renderer {
+	return (*C.SDL_Renderer)(unsafe.Pointer(re))
+}
+
+// Destroy destroys the rendering context for
+// a window and free associated textures.
+func (re *Renderer) Destroy() {
+	C.SDL_DestroyRenderer(re.cptr())
+}
+
+// Clear clears the current rendering
 // target with the drawing color.
-func (renderer *Renderer) RenderClear() error {
-	if C.SDL_RenderClear(renderer.cptr()) < 0 {
+func (re *Renderer) Clear() error {
+	if C.SDL_RenderClear(re.cptr()) < 0 {
 		return errors.New(Error())
 	}
 	return nil
 }
 
-// SDL_RenderCopy
+// Copy copies a portion of the texture to the current rendering target.
+func (re *Renderer) Copy(tx *Texture, srcRect, dstRect *image.Rectangle) error {
+	cs := (*C.SDL_Rect)(unsafe.Pointer(srcRect))
+	cd := (*C.SDL_Rect)(unsafe.Pointer(dstRect))
+	if C.SDL_RenderCopy(re.cptr(), tx.cptr(), cs, cd) < 0 {
+		return errors.New(Error())
+	}
+	return nil
+}
+
 // SDL_RenderCopyEx
 
-// RenderDrawLine draws a line on the current rendering target.
-func (renderer *Renderer) RenderDrawLine(x1, y1, x2, y2 int) error {
+// DrawLine draws a line on the current rendering target.
+func (re *Renderer) DrawLine(x1, y1, x2, y2 int) error {
 	if C.SDL_RenderDrawLine(
-		renderer.cptr(),
+		re.cptr(),
 		C.int(x1),
 		C.int(y1),
 		C.int(x2),
@@ -93,10 +109,10 @@ func (renderer *Renderer) RenderDrawLine(x1, y1, x2, y2 int) error {
 
 // SDL_RenderDrawLines
 
-// RenderDrawPoint draws a point on the current rendering target.
-func (renderer *Renderer) RenderDrawPoint(x, y int) error {
+// DrawPoint draws a point on the current rendering target.
+func (re *Renderer) DrawPoint(x, y int) error {
 	if C.SDL_RenderDrawPoint(
-		renderer.cptr(),
+		re.cptr(),
 		C.int(x),
 		C.int(y)) < 0 {
 		return errors.New(Error())
@@ -104,10 +120,10 @@ func (renderer *Renderer) RenderDrawPoint(x, y int) error {
 	return nil
 }
 
-// RenderDrawPoints draws multiple points on the current rendering target.
-func (renderer *Renderer) RenderDrawPoints(points []struct{ X, Y int32 }) error {
+// DrawPoints draws multiple points on the current rendering target.
+func (re *Renderer) DrawPoints(points []struct{ X, Y int32 }) error {
 	if C.SDL_RenderDrawPoints(
-		renderer.cptr(),
+		re.cptr(),
 		(*C.SDL_Point)(unsafe.Pointer(&points[0])),
 		C.int(len(points))) < 0 {
 		return errors.New(Error())
@@ -126,10 +142,10 @@ func (renderer *Renderer) RenderDrawPoints(points []struct{ X, Y int32 }) error 
 // SDL_RenderGetViewport
 // SDL_RenderIsClipEnabled
 
-// RenderPresent updates the screen with any rendering
+// Present updates the screen with any rendering
 // performed since the previous call.
-func (renderer *Renderer) RenderPresent() {
-	C.SDL_RenderPresent(renderer.cptr())
+func (re *Renderer) Present() {
+	C.SDL_RenderPresent(re.cptr())
 }
 
 // SDL_RenderReadPixels
@@ -141,11 +157,11 @@ func (renderer *Renderer) RenderPresent() {
 // SDL_RenderTargetSupported
 // SDL_SetRenderDrawBlendMode
 
-// SetRenderDrawColor sets the color used for drawing
+// SetDrawColor sets the color used for drawing
 // operations (Rect, Line and Clear).
-func (renderer *Renderer) SetRenderDrawColor(r, g, b, a uint8) error {
+func (re *Renderer) SetDrawColor(r, g, b, a uint8) error {
 	if C.SDL_SetRenderDrawColor(
-		renderer.cptr(),
+		re.cptr(),
 		C.Uint8(r),
 		C.Uint8(g),
 		C.Uint8(b),
