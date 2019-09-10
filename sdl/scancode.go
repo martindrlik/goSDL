@@ -138,7 +138,7 @@ const (
 
 	ScanKeypadDblVerticalBar = C.SDL_SCANCODE_KP_DBLVERTICALBAR
 	ScanKeypadDecimal        = C.SDL_SCANCODE_KP_DECIMAL
-	ScanKeypad               = C.SDL_SCANCODE_KP_DIVIDE
+	ScanKeypadDivide         = C.SDL_SCANCODE_KP_DIVIDE
 	ScanKeypadE              = C.SDL_SCANCODE_KP_E
 	ScanKeypadEnter          = C.SDL_SCANCODE_KP_ENTER
 	ScanKeypadEquals         = C.SDL_SCANCODE_KP_EQUALS
@@ -211,7 +211,7 @@ const (
 	ScanRightAlt    = C.SDL_SCANCODE_RALT
 	ScanRightCtrl   = C.SDL_SCANCODE_RCTRL
 	ScanReturn      = C.SDL_SCANCODE_RETURN
-	ScanReturn      = C.SDL_SCANCODE_RETURN2
+	ScanReturn2     = C.SDL_SCANCODE_RETURN2
 
 	ScanRightGUI     = C.SDL_SCANCODE_RGUI
 	ScanRight        = C.SDL_SCANCODE_RIGHT
@@ -222,7 +222,7 @@ const (
 	ScanSelect       = C.SDL_SCANCODE_SELECT
 	ScanSemicolon    = C.SDL_SCANCODE_SEMICOLON
 	ScanSeparator    = C.SDL_SCANCODE_SEPARATOR
-	Scan             = C.SDL_SCANCODE_SLASH
+	ScanSlash        = C.SDL_SCANCODE_SLASH
 
 	ScanSleep              = C.SDL_SCANCODE_SLEEP
 	ScanSpace              = C.SDL_SCANCODE_SPACE
@@ -257,17 +257,13 @@ const (
 	ScanLang1          = C.SDL_SCANCODE_LANG1
 	ScanLang2          = C.SDL_SCANCODE_LANG2
 
-	ScanLang3             = C.SDL_SCANCODE_LANG3
-	ScanLang4             = C.SDL_SCANCODE_LANG4
-	ScanLang5             = C.SDL_SCANCODE_LANG5
-	ScanLang6             = C.SDL_SCANCODE_LANG6
-	ScanLang7             = C.SDL_SCANCODE_LANG7
-	ScanLang8             = C.SDL_SCANCODE_LANG8
-	ScanLang9             = C.SDL_SCANCODE_LANG9
-	ScanLockingCapsLock   = C.SDL_SCANCODE_LOCKINGCAPSLOCK
-	ScanLockingNumLock    = C.SDL_SCANCODE_LOCKINGNUMLOCK
-	ScanLockingScrollLock = C.SDL_SCANCODE_LOCKINGSCROLLLOCK
-
+	ScanLang3          = C.SDL_SCANCODE_LANG3
+	ScanLang4          = C.SDL_SCANCODE_LANG4
+	ScanLang5          = C.SDL_SCANCODE_LANG5
+	ScanLang6          = C.SDL_SCANCODE_LANG6
+	ScanLang7          = C.SDL_SCANCODE_LANG7
+	ScanLang8          = C.SDL_SCANCODE_LANG8
+	ScanLang9          = C.SDL_SCANCODE_LANG9
 	ScanNonUSBackslash = C.SDL_SCANCODE_NONUSBACKSLASH
 	ScanNonUSHash      = C.SDL_SCANCODE_NONUSHASH
 )

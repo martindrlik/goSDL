@@ -138,7 +138,7 @@ const (
 
 	KeypadDblVerticalBar = C.SDLK_KP_DBLVERTICALBAR
 	KeypadDecimal        = C.SDLK_KP_DECIMAL
-	Keypad               = C.SDLK_KP_DIVIDE
+	KeyKeypadDivide      = C.SDLK_KP_DIVIDE
 	KeypadE              = C.SDLK_KP_E
 	KeypadEnter          = C.SDLK_KP_ENTER
 	KeypadEquals         = C.SDLK_KP_EQUALS
@@ -158,16 +158,16 @@ const (
 	KeypadMemMultiply = C.SDLK_KP_MEMMULTIPLY
 	KeypadMemRecall   = C.SDLK_KP_MEMRECALL
 
-	KeypadMemStore    = C.SDLK_KP_MEMSTORE
-	KeypadMemSubtract = C.SDLK_KP_MEMSUBTRACT
-	KeypadMinus       = C.SDLK_KP_MINUS
-	KeypadMultiply    = C.SDLK_KP_MULTIPLY
-	KeypadOctal       = C.SDLK_KP_OCTAL
-	KeypadPercent     = C.SDLK_KP_PERCENT
-	KeypadPeriod      = C.SDLK_KP_PERIOD
-	KeypadPlus        = C.SDLK_KP_PLUS
-	KeypadPlusMinus   = C.SDLK_KP_PLUSMINUS
-	KeypadPower       = C.SDLK_KP_POWER
+	KeypadMemStore     = C.SDLK_KP_MEMSTORE
+	KeypadMemSubtract  = C.SDLK_KP_MEMSUBTRACT
+	KeypadMinus        = C.SDLK_KP_MINUS
+	KeypadMultiply     = C.SDLK_KP_MULTIPLY
+	KeypadOctal        = C.SDLK_KP_OCTAL
+	KeypadPercent      = C.SDLK_KP_PERCENT
+	KeypadPeriod       = C.SDLK_KP_PERIOD
+	KeypadPlus         = C.SDLK_KP_PLUS
+	KeyKeypadPlusMinus = C.SDLK_KP_PLUSMINUS
+	KeypadPower        = C.SDLK_KP_POWER
 
 	KeypadRightBrace  = C.SDLK_KP_RIGHTBRACE
 	KeypadRightParen  = C.SDLK_KP_RIGHTPAREN
@@ -211,7 +211,7 @@ const (
 	KeyRightAlt    = C.SDLK_RALT
 	KeyRightCtrl   = C.SDLK_RCTRL
 	KeyReturn      = C.SDLK_RETURN
-	KeyReturn      = C.SDLK_RETURN2
+	KeyReturn2     = C.SDLK_RETURN2
 
 	KeyRightGUI     = C.SDLK_RGUI
 	KeyRight        = C.SDLK_RIGHT
@@ -222,7 +222,7 @@ const (
 	KeySelect       = C.SDLK_SELECT
 	KeySemicolon    = C.SDLK_SEMICOLON
 	KeySeparator    = C.SDLK_SEPARATOR
-	Key             = C.SDLK_SLASH
+	KeySlash        = C.SDLK_SLASH
 
 	KeySleep              = C.SDLK_SLEEP
 	KeySpace              = C.SDLK_SPACE
@@ -248,7 +248,7 @@ const (
 
 	KeyMultiply  = C.SDLK_ASTERISK
 	KeyAt        = C.SDLK_AT
-	KeyPower     = C.SDLK_CARET
+	KeyCaret     = C.SDLK_CARET
 	KeyColon     = C.SDLK_COLON
 	KeyDollar    = C.SDLK_DOLLAR
 	KeyExclam    = C.SDLK_EXCLAIM
@@ -260,7 +260,7 @@ const (
 	KeyPercent    = C.SDLK_PERCENT
 	KeyPlus       = C.SDLK_PLUS
 	KeyQuestion   = C.SDLK_QUESTION
-	Key           = C.SDLK_QUOTEDBL
+	KeyQuoteDbl   = C.SDLK_QUOTEDBL
 	KeyRightParen = C.SDLK_RIGHTPAREN
 	KeyUnderscore = C.SDLK_UNDERSCORE
 )
