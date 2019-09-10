@@ -142,7 +142,11 @@ func PollEvent(ev *Event) int {
 	return int(C.SDL_PollEvent((*C.SDL_Event)(unsafe.Pointer(ev))))
 }
 
-// SDL_PumpEvents
+// PumpEvents pumps the event loop, gathering events from the input devices.
+func PumpEvents() {
+	C.SDL_PumpEvents()
+}
+
 // SDL_PushEvent
 // SDL_QuitRequested
 // SDL_RecordGesture
